@@ -1,0 +1,5 @@
+IP: 51.250.44.238;
+name_taski: https://bagsducks.duckdns.org;
+name_kittygram: https://bagsducks.duckdns.org;
+login: admin;
+password: qwerty;
