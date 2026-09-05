@@ -3,11 +3,27 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$'
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    with open(env_path, encoding='utf-8') as env_file:
+        for line in env_file:
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+            key, value = line.split('=', 1)
+            os.environ.setdefault(key, value)
 
-DEBUG = True
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    'django-insecure-default-key-for-tests',
+)
 
-ALLOWED_HOSTS = []
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+ALLOWED_HOSTS = os.getenv(
+    'ALLOWED_HOSTS',
+    '127.0.0.1,localhost,51.250.44.238,bagsducks.duckdns.org',
+).split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -90,7 +106,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'collected_static'
+STATIC_ROOT = '/var/www/kittygram/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/var/www/kittygram/media'
 
